@@ -1,6 +1,7 @@
 {
   "title": "murong's sponsors",
-  "description": "People and companies supporting this open source work.",
+  "description": "Thanks to the people and companies supporting my open source work.",
+  "contactEmail": "hi@mrong.me",
   "sponsors": [
     {
       "name": "Codeproxy",

@@ -20,6 +20,7 @@ export type SponsorsLayout = {
 export type SponsorsConfig = {
   title: string;
   description?: string;
+  contactEmail?: string;
   layout?: SponsorsLayout;
   sponsors: Sponsor[];
 };
@@ -32,6 +33,7 @@ export type SponsorGroup = {
 export type SponsorPageData = {
   title: string;
   description?: string;
+  contactEmail?: string;
   sponsors: Sponsor[];
   groups: SponsorGroup[];
 };
@@ -133,6 +135,7 @@ export function buildSponsorPageData(config: SponsorsConfig): SponsorPageData {
   return {
     title: config.title,
     description: config.description,
+    contactEmail: config.contactEmail,
     sponsors: config.sponsors,
     groups,
   };

@@ -8,6 +8,7 @@ import {
 const config: SponsorsConfig = {
   title: "Project Sponsors",
   description: "Synthetic sponsors used by tests.",
+  contactEmail: "sponsor@example.test",
   layout: {
     width: 720,
     columns: 2,
@@ -80,5 +81,6 @@ describe("buildSponsorPageData", () => {
         sponsors: [config.sponsors[1]],
       },
     ]);
+    expect(pageData.contactEmail).toBe("sponsor@example.test");
   });
 });
