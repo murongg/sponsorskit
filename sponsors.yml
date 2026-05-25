@@ -1,0 +1,12 @@
+title: murong's sponsors
+description: People and companies supporting this open source work.
+layout:
+  width: 960
+  columns: 4
+  logoWidth: 156
+  logoHeight: 72
+  gap: 24
+sponsors:
+  - name: Codeproxy
+    logo: ./logos/codeproxy.png
+    url: https://codeproxy.dev/register?aff=QCP3QP6X

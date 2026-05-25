@@ -1,0 +1,21 @@
+{
+  "name": "sponsorskit",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run generate && node --max-old-space-size=4096 ./node_modules/nuxt/bin/nuxt.mjs dev",
+    "build": "bun run generate && node --max-old-space-size=4096 ./node_modules/nuxt/bin/nuxt.mjs build",
+    "generate": "bun run scripts/generate.ts",
+    "test": "bun test",
+    "typecheck": "node --max-old-space-size=4096 ./node_modules/nuxt/bin/nuxt.mjs typecheck"
+  },
+  "dependencies": {
+    "@nuxtjs/tailwindcss": "latest",
+    "nuxt": "latest",
+    "yaml": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vue-tsc": "latest"
+  }
+}
