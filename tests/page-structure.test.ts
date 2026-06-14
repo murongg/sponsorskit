@@ -41,6 +41,16 @@ describe("sponsor page structure", () => {
     expect(introIndex).toBeLessThan(headingIndex);
   });
 
+  it("shows the generated default sponsor image when no sponsor groups exist", async () => {
+    const app = await readFile(new URL("../app/app.vue", import.meta.url), "utf8");
+
+    expect(app).toContain("hasSponsorGroups");
+    expect(app).toContain('v-if="hasSponsorGroups"');
+    expect(app).toContain("v-else");
+    expect(app).toContain('src="/sponsors.svg"');
+    expect(app).toContain('alt="Open for sponsors"');
+  });
+
   it("adds a sponsor contact line with more space before the heading than before logos", async () => {
     const app = await readFile(new URL("../app/app.vue", import.meta.url), "utf8");
 

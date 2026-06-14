@@ -59,6 +59,11 @@ const MIME_TYPES: Record<string, string> = {
 export function renderSponsorsSvg(config: SponsorsConfig): string {
   const layout = resolveLayout(config.layout);
   const groups = buildSponsorPageData(config).groups;
+
+  if (groups.length === 0) {
+    return renderEmptySponsorsSvg(config, layout);
+  }
+
   const topPadding = 18;
   const headingHeight = 20;
   const headingToGrid = 10;
@@ -110,6 +115,23 @@ export function renderSponsorsSvg(config: SponsorsConfig): string {
     `<title id="title">${escapeText(config.title)}</title>`,
     `<desc id="desc">Sponsor logos</desc>`,
     groupNodes.join(""),
+    `</svg>`,
+  ].join("");
+}
+
+function renderEmptySponsorsSvg(
+  config: SponsorsConfig,
+  layout: ResolvedLayout,
+): string {
+  const height = 84;
+  const centerX = layout.width / 2;
+
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${height}" viewBox="0 0 ${layout.width} ${height}" role="img" aria-labelledby="title desc">`,
+    `<title id="title">${escapeText(config.title)}</title>`,
+    `<desc id="desc">Open sponsor slots</desc>`,
+    `<text x="${formatNumber(centerX)}" y="35" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="22" font-weight="700" fill="#202725">Open for sponsors</text>`,
+    `<text x="${formatNumber(centerX)}" y="59" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14" fill="#66736f">Support open source work</text>`,
     `</svg>`,
   ].join("");
 }

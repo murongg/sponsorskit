@@ -65,6 +65,25 @@ describe("renderSponsorsSvg", () => {
     expect(svg).toContain('height="256"');
     expect(svg).toContain('viewBox="0 0 720 256"');
   });
+
+  it("renders a default image when there are no sponsors", () => {
+    const svg = renderSponsorsSvg({
+      ...config,
+      sponsors: [],
+    });
+
+    expect(svg).toContain('height="84"');
+    expect(svg).toContain('viewBox="0 0 720 84"');
+    expect(svg).toContain("<desc id=\"desc\">Open sponsor slots</desc>");
+    expect(svg).toContain("Open for sponsors");
+    expect(svg).toContain("Support open source work");
+    expect(svg).not.toContain("<rect ");
+    expect(svg).not.toContain("<path ");
+    expect(svg).not.toContain("<circle ");
+    expect(svg).not.toContain("No sponsors yet");
+    expect(svg).not.toContain("<a href=");
+    expect(svg).not.toContain("<image ");
+  });
 });
 
 describe("buildSponsorPageData", () => {

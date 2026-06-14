@@ -40,6 +40,15 @@ useHead(() => ({
     },
   ],
 }));
+
+const hasSponsorGroups = computed(
+  () => (data.value?.groups?.length ?? 0) > 0,
+);
+const displayedGroups = computed<SponsorGroup[]>(() =>
+  hasSponsorGroups.value
+    ? (data.value?.groups ?? [])
+    : [{ tier: "Sponsors", sponsors: [] }],
+);
 </script>
 
 <template>
@@ -55,7 +64,7 @@ useHead(() => ({
       <span class="sr-only">GitHub</span>
     </a>
     <div class="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-24 sm:px-10 sm:py-28">
-      <section v-for="group in data?.groups" :key="group.tier" class="flex flex-col items-center gap-8 sm:gap-10">
+      <section v-for="group in displayedGroups" :key="group.tier" class="flex flex-col items-center gap-8 sm:gap-10">
         <header class="flex flex-col items-center gap-12 text-center">
           <div class="flex max-w-xl flex-col items-center gap-4">
             <p v-if="data?.description" class="text-base leading-7 text-[oklch(0.46_0.004_250)]">
@@ -69,18 +78,19 @@ useHead(() => ({
               </a>
             </p>
           </div>
-          <h2 class="text-center text-3xl font-semibold tracking-[0] text-[oklch(0.16_0_0)]">
+          <h2 v-if="hasSponsorGroups" class="text-center text-3xl font-semibold tracking-[0] text-[oklch(0.16_0_0)]">
             {{ group.tier }}
           </h2>
         </header>
 
-        <div class="flex w-full flex-wrap justify-center gap-x-20 gap-y-14">
+        <div v-if="hasSponsorGroups" class="flex w-full flex-wrap justify-center gap-x-20 gap-y-14">
           <a v-for="sponsor in group.sponsors" :key="sponsor.name" :href="sponsor.url" target="_blank"
             rel="noopener noreferrer" :aria-label="sponsor.name"
             class="group flex h-24 w-48 items-center justify-center rounded-md transition duration-200 ease-out hover:-translate-y-0.5 hover:opacity-85 focus:outline-none focus-visible:ring-1 focus-visible:ring-[oklch(0.72_0.004_250)] focus-visible:ring-offset-6 focus-visible:ring-offset-[oklch(0.99_0.002_250)]">
             <img :src="sponsor.logo" :alt="sponsor.name" class="max-h-20 w-full object-contain" loading="lazy" />
           </a>
         </div>
+        <img v-else src="/sponsors.svg" alt="Open for sponsors" class="h-auto w-full max-w-3xl" />
       </section>
     </div>
   </main>
