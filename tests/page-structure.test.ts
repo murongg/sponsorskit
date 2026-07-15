@@ -19,7 +19,7 @@ describe("sponsor page structure", () => {
     expect(app).not.toContain("group.sponsors.length <= 3");
     expect(app).not.toContain("sm:grid-cols-3");
     expect(app).toContain("flex w-full flex-wrap justify-center");
-    expect(app).toContain("gap-x-10 gap-y-14");
+    expect(app).toContain("gap-x-2 gap-y-14");
     expect(app).toContain(
       'class="group flex h-24 w-20 items-center justify-center',
     );
@@ -69,7 +69,7 @@ describe("sponsor page structure", () => {
     expect(app).toContain("mailto:${data.contactEmail}");
     expect(app).toContain("class=\"flex flex-col items-center gap-12 text-center\"");
     expect(app).toContain("class=\"flex flex-col items-center gap-8 sm:gap-10\"");
-    expect(app).toContain("gap-x-10 gap-y-14");
+    expect(app).toContain("gap-x-2 gap-y-14");
   });
 
   it("shows a top-right GitHub profile link", async () => {
