@@ -1,0 +1,6 @@
+{
+  "files": ["app/app.vue"],
+  "insertBefore": "</template>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}

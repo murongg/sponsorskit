@@ -70,6 +70,7 @@ export function renderSponsorsSvg(config: SponsorsConfig): string {
   const groupGap = 16;
   const bottomPadding = 18;
   let cursor = topPadding;
+  const clipNodes: string[] = [];
   const groupNodes: string[] = [];
 
   for (const [groupIndex, group] of groups.entries()) {
@@ -88,12 +89,23 @@ export function renderSponsorsSvg(config: SponsorsConfig): string {
       const column = sponsorIndex % columns;
       const x = column * (cellWidth + layout.gap);
       const y = cursor + row * (layout.logoHeight + layout.gap);
-      const logoX = x + (cellWidth - layout.logoWidth) / 2;
+      // Keep the circular crop inside the configured slot so row heights stay stable.
+      const avatarSize = Math.min(layout.logoWidth, layout.logoHeight);
+      const avatarRadius = avatarSize / 2;
+      const avatarX = x + (cellWidth - avatarSize) / 2;
+      const avatarY = y + (layout.logoHeight - avatarSize) / 2;
+      const avatarCenterX = avatarX + avatarRadius;
+      const avatarCenterY = avatarY + avatarRadius;
+      const clipId = `sponsor-avatar-${groupIndex}-${sponsorIndex}`;
+
+      clipNodes.push(
+        `<clipPath id="${clipId}"><circle cx="${formatNumber(avatarCenterX)}" cy="${formatNumber(avatarCenterY)}" r="${formatNumber(avatarRadius)}" /></clipPath>`,
+      );
 
       groupNodes.push(
         [
           `<a href="${escapeAttribute(sponsor.url)}" target="_blank" rel="noopener noreferrer">`,
-          `<image href="${escapeAttribute(sponsor.logo)}" x="${formatNumber(logoX)}" y="${formatNumber(y)}" width="${layout.logoWidth}" height="${layout.logoHeight}" preserveAspectRatio="xMidYMid meet" />`,
+          `<image href="${escapeAttribute(sponsor.logo)}" x="${formatNumber(avatarX)}" y="${formatNumber(avatarY)}" width="${formatNumber(avatarSize)}" height="${formatNumber(avatarSize)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" />`,
           `<title>${escapeText(sponsor.name)}</title>`,
           `</a>`,
         ].join(""),
@@ -114,6 +126,7 @@ export function renderSponsorsSvg(config: SponsorsConfig): string {
     `<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${height}" viewBox="0 0 ${layout.width} ${height}" role="img" aria-labelledby="title desc">`,
     `<title id="title">${escapeText(config.title)}</title>`,
     `<desc id="desc">Sponsor logos</desc>`,
+    `<defs>${clipNodes.join("")}</defs>`,
     groupNodes.join(""),
     `</svg>`,
   ].join("");

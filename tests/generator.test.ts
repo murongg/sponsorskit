@@ -59,6 +59,16 @@ describe("renderSponsorsSvg", () => {
     expect(svg).not.toContain("<rect width=");
   });
 
+  it("crops sponsor logos into circles without stretching them", () => {
+    const svg = renderSponsorsSvg(config);
+
+    expect(svg).toContain('<clipPath id="sponsor-avatar-0-0">');
+    expect(svg).toContain('<circle cx="174" cy="84" r="36" />');
+    expect(svg).toContain(
+      'width="72" height="72" preserveAspectRatio="xMidYMid slice" clip-path="url(#sponsor-avatar-0-0)"',
+    );
+  });
+
   it("derives the height from grouped sponsor rows", () => {
     const svg = renderSponsorsSvg(config);
 

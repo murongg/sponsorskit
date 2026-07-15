@@ -7,4 +7,7 @@ layout:
   logoWidth: 156
   logoHeight: 72
   gap: 24
-sponsors: []
+sponsors:
+  - name: ShiyuCheng2018
+    logo: https://github.com/ShiyuCheng2018.png
+    url: https://github.com/ShiyuCheng2018/

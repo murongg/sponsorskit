@@ -21,6 +21,13 @@ describe("sponsor page structure", () => {
     expect(app).toContain("flex w-full flex-wrap justify-center");
   });
 
+  it("crops sponsor images into full circles", async () => {
+    const app = await readFile(new URL("../app/app.vue", import.meta.url), "utf8");
+
+    expect(app).toContain('class="h-20 w-20 rounded-full object-cover"');
+    expect(app).not.toContain('class="max-h-20 w-full object-contain"');
+  });
+
   it("uses a neutral focus treatment instead of a colored border", async () => {
     const app = await readFile(new URL("../app/app.vue", import.meta.url), "utf8");
 

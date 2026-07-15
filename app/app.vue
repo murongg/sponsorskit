@@ -87,7 +87,7 @@ const displayedGroups = computed<SponsorGroup[]>(() =>
           <a v-for="sponsor in group.sponsors" :key="sponsor.name" :href="sponsor.url" target="_blank"
             rel="noopener noreferrer" :aria-label="sponsor.name"
             class="group flex h-24 w-48 items-center justify-center rounded-md transition duration-200 ease-out hover:-translate-y-0.5 hover:opacity-85 focus:outline-none focus-visible:ring-1 focus-visible:ring-[oklch(0.72_0.004_250)] focus-visible:ring-offset-6 focus-visible:ring-offset-[oklch(0.99_0.002_250)]">
-            <img :src="sponsor.logo" :alt="sponsor.name" class="max-h-20 w-full object-contain" loading="lazy" />
+            <img :src="sponsor.logo" :alt="sponsor.name" class="h-20 w-20 rounded-full object-cover" loading="lazy" />
           </a>
         </div>
         <img v-else src="/sponsors.svg" alt="Open for sponsors" class="h-auto w-full max-w-3xl" />
