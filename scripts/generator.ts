@@ -76,8 +76,13 @@ export function renderSponsorsSvg(config: SponsorsConfig): string {
   for (const [groupIndex, group] of groups.entries()) {
     const columns = Math.max(1, Math.min(layout.columns, group.sponsors.length));
     const rowCount = Math.max(1, Math.ceil(group.sponsors.length / columns));
-    const cellWidth =
+    const availableAvatarSize =
       (layout.width - layout.gap * Math.max(0, columns - 1)) / columns;
+    const avatarSize = Math.min(
+      layout.logoWidth,
+      layout.logoHeight,
+      availableAvatarSize,
+    );
 
     groupNodes.push(
       `<text x="${layout.width / 2}" y="${formatNumber(cursor + 15)}" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="18" font-weight="700" fill="#333">${escapeText(group.tier)}</text>`,
@@ -87,12 +92,18 @@ export function renderSponsorsSvg(config: SponsorsConfig): string {
     for (const [sponsorIndex, sponsor] of group.sponsors.entries()) {
       const row = Math.floor(sponsorIndex / columns);
       const column = sponsorIndex % columns;
-      const x = column * (cellWidth + layout.gap);
+      const rowSponsorCount = Math.min(
+        columns,
+        group.sponsors.length - row * columns,
+      );
+      const rowWidth =
+        rowSponsorCount * avatarSize +
+        layout.gap * Math.max(0, rowSponsorCount - 1);
+      // Size rows from visible avatars so layout.gap remains the actual edge gap.
+      const rowX = (layout.width - rowWidth) / 2;
+      const avatarX = rowX + column * (avatarSize + layout.gap);
       const y = cursor + row * (layout.logoHeight + layout.gap);
-      // Keep the circular crop inside the configured slot so row heights stay stable.
-      const avatarSize = Math.min(layout.logoWidth, layout.logoHeight);
       const avatarRadius = avatarSize / 2;
-      const avatarX = x + (cellWidth - avatarSize) / 2;
       const avatarY = y + (layout.logoHeight - avatarSize) / 2;
       const avatarCenterX = avatarX + avatarRadius;
       const avatarCenterY = avatarY + avatarRadius;

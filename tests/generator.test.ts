@@ -63,10 +63,25 @@ describe("renderSponsorsSvg", () => {
     const svg = renderSponsorsSvg(config);
 
     expect(svg).toContain('<clipPath id="sponsor-avatar-0-0">');
-    expect(svg).toContain('<circle cx="174" cy="84" r="36" />');
+    expect(svg).toContain("<circle ");
+    expect(svg).toContain('r="36" />');
     expect(svg).toContain(
       'width="72" height="72" preserveAspectRatio="xMidYMid slice" clip-path="url(#sponsor-avatar-0-0)"',
     );
+  });
+
+  it("uses the configured gap between visible avatars and centers sparse rows", () => {
+    const svg = renderSponsorsSvg({
+      ...config,
+      sponsors: config.sponsors.map((sponsor) => ({
+        ...sponsor,
+        tier: "Sponsors",
+      })),
+    });
+
+    expect(svg).toContain('<circle cx="312" cy="84" r="36" />');
+    expect(svg).toContain('<circle cx="408" cy="84" r="36" />');
+    expect(svg).toContain('<circle cx="360" cy="180" r="36" />');
   });
 
   it("derives the height from grouped sponsor rows", () => {

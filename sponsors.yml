@@ -6,8 +6,11 @@ layout:
   columns: 4
   logoWidth: 156
   logoHeight: 72
-  gap: 24
+  gap: 40
 sponsors:
   - name: ShiyuCheng2018
     logo: https://github.com/ShiyuCheng2018.png
     url: https://github.com/ShiyuCheng2018/
+  - name: ch0c00late
+    logo: https://github.com/ch0c00late.png
+    url: https://github.com/ch0c00late/
