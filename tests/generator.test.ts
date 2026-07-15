@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import {
   buildSponsorPageData,
+  inlineSponsorLogos,
   renderSponsorsSvg,
   type SponsorsConfig,
 } from "../scripts/generator";
@@ -126,5 +127,41 @@ describe("buildSponsorPageData", () => {
       },
     ]);
     expect(pageData.contactEmail).toBe("sponsor@example.test");
+  });
+});
+
+describe("inlineSponsorLogos", () => {
+  it("retries a remote logo after a transient network failure", async () => {
+    const originalFetch = globalThis.fetch;
+    let attempts = 0;
+
+    globalThis.fetch = (async () => {
+      attempts += 1;
+
+      if (attempts === 1) {
+        throw new TypeError("synthetic connection reset");
+      }
+
+      return new Response("<svg/>", {
+        headers: { "content-type": "image/svg+xml" },
+      });
+    }) as typeof fetch;
+
+    try {
+      const result = await inlineSponsorLogos(
+        {
+          ...config,
+          sponsors: [config.sponsors[0]],
+        },
+        "/tmp/synthetic-project",
+      );
+
+      expect(attempts).toBe(2);
+      expect(result.sponsors[0]?.logo).toBe(
+        "data:image/svg+xml;base64,PHN2Zy8+",
+      );
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });

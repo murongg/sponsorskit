@@ -56,6 +56,9 @@ const MIME_TYPES: Record<string, string> = {
   ".webp": "image/webp",
 };
 
+const REMOTE_LOGO_FETCH_ATTEMPTS = 3;
+const REMOTE_LOGO_RETRY_DELAY_MS = 200;
+
 export function renderSponsorsSvg(config: SponsorsConfig): string {
   const layout = resolveLayout(config.layout);
   const groups = buildSponsorPageData(config).groups;
@@ -222,7 +225,7 @@ async function toDataUri(logo: string, baseDir: string): Promise<string> {
   }
 
   if (logo.startsWith("http://") || logo.startsWith("https://")) {
-    const response = await fetch(logo);
+    const response = await fetchRemoteLogo(logo);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch logo ${logo}: ${response.status}`);
@@ -242,6 +245,27 @@ async function toDataUri(logo: string, baseDir: string): Promise<string> {
   const bytes = await readFile(filePath);
 
   return `data:${contentType};base64,${bytes.toString("base64")}`;
+}
+
+async function fetchRemoteLogo(logo: string): Promise<Response> {
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= REMOTE_LOGO_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      return await fetch(logo);
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < REMOTE_LOGO_FETCH_ATTEMPTS) {
+        // GitHub avatar connections can reset transiently during concurrent generation.
+        await new Promise((resolve) =>
+          setTimeout(resolve, REMOTE_LOGO_RETRY_DELAY_MS * attempt),
+        );
+      }
+    }
+  }
+
+  throw lastError;
 }
 
 function validateConfig(config: SponsorsConfig): void {
